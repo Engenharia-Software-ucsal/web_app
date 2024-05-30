@@ -1,16 +1,25 @@
 package com.rpEmpresa.web_app.entity;
 
 import com.rpEmpresa.web_app.enums.Role;
+import lombok.Getter;
+import lombok.Setter;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
+@Setter
+@Getter
 public class Employee implements Serializable {
     String nome;
     String cpf;
     Long id;
     Role role;
+    ArrayList<Dependent> dependents;
 
 
     public Employee(Long id, String nome, String cpf, Role role) {
@@ -18,41 +27,13 @@ public class Employee implements Serializable {
         this.nome = nome;
         this.cpf = cpf;
         this.role = role;
+        this.dependents = new ArrayList<>();
     }
 
     public Employee() {
-
+        this.dependents = new ArrayList<>();
     }
 
-    public String getNome() {
-        return nome;
-    }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
 
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
 }

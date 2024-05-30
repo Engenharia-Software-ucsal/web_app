@@ -1,5 +1,7 @@
 package com.rpEmpresa.web_app.http;
 
+import com.rpEmpresa.web_app.entity.Employee;
+import com.rpEmpresa.web_app.http.dto.DependentDto;
 import com.rpEmpresa.web_app.http.dto.EmployeeDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.rpEmpresa.web_app.services.EmployeeService;
 
 import java.util.HashMap;
+import java.util.List;
 
 
 @RestController
@@ -26,13 +29,25 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.createEmployee(dto));
     }
 
-    @GetMapping("/status")
-    public @ResponseBody ResponseEntity getEmployeeStatus() {
 
-        var map = new HashMap<String, Object>();
+    @PostMapping("/dependent")
+    public @ResponseBody ResponseEntity<Boolean> addDependent(@RequestBody @Validated DependentDto dto) {
 
-        map.put("status", true);
 
-        return ResponseEntity.status(200).body(map);
+        var results = this.employeeService.addDependentEmployee(dto);
+
+        return results ? ResponseEntity.ok(true) : ResponseEntity.badRequest().body(false);
+
     }
+
+
+    @GetMapping
+    public @ResponseBody ResponseEntity<List<Employee>> findAllEmployeeWithDependents() {
+
+        return ResponseEntity.ok().body(this.employeeService.findAllEmployeesWithDependents());
+
+    }
+
+
+
 }
