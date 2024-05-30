@@ -1,0 +1,1 @@
+DROP DATABASE rp_app_db;
