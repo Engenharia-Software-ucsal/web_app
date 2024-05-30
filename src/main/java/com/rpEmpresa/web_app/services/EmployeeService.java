@@ -7,12 +7,10 @@ import com.rpEmpresa.web_app.http.dto.DependentDto;
 import com.rpEmpresa.web_app.http.dto.EmployeeDto;
 import com.rpEmpresa.web_app.database.PgConnection;
 import com.rpEmpresa.web_app.entity.Employee;
+import com.rpEmpresa.web_app.http.dto.UpdateEmployeeDto;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
 
 @Service
@@ -50,9 +48,18 @@ public class EmployeeService {
         }
     }
 
-    public Boolean addDependentEmployee(DependentDto dto) {
+    public Boolean addDependentEmployee(DependentDto dto) throws  Exception{
 
-        try(Connection con = this.db.getConnection()) {
+            Connection con = this.db.getConnection();
+
+            var existsEmployee = this.findById(dto.employeeId);
+
+            if(existsEmployee == null) {
+                throw  new Exception("Employee Not found");
+            }
+
+           System.out.println(existsEmployee.getId());
+
             String sql = "INSERT INTO dependent (name,cpf,employee_id) VALUES (?,?,?)";
 
             PreparedStatement ps = con.prepareStatement(sql);
@@ -68,18 +75,12 @@ public class EmployeeService {
             ps.close();
 
             return true;
-
-        }catch (SQLException e) {
-
-            e.printStackTrace();
-
-            return false;
-        }
-
     }
 
     public List<Employee> findAllEmployeesWithDependents() {
         try(Connection con = this.db.getConnection()) {
+
+
             String query = """
                     SELECT e.cpf as employee_cpf,e.role as employee_role, e.id as employee_id, e.name as employee_name, d.id
                         as dependent_id, d.name as dependent_name, d.cpf as dependent_cpf, d.employee_id as dependent_for
@@ -145,5 +146,95 @@ public class EmployeeService {
 
 
     }
+
+
+    public Employee findById(Long id) {
+        try (Connection con = this.db.getConnection()) {
+
+            String sql = "SELECT * from employee WHERE employee.id = ?";
+
+            PreparedStatement smt = con.prepareStatement(sql);
+
+            smt.setLong(1, id);
+
+            var results = smt.executeQuery();
+
+
+            Employee employee = new Employee();
+
+            while (results.next()) {
+                employee.setId(results.getLong("id"));
+                employee.setCpf(results.getString("cpf"));
+                employee.setRole(Role.fromString(results.getString("role")));
+                employee.setNome(results.getString("name"));
+            }
+
+            smt.close();
+            con.close();
+
+            return employee.getId() == null ? null : employee;
+
+        } catch (SQLException e) {
+
+            return null;
+        }
+
+    }
+
+    public void  updateEmployee(UpdateEmployeeDto dto) throws  Exception{
+
+        var  existsEmployee = this.findById(dto.getId());
+
+
+        if(existsEmployee == null) {
+            throw  new Exception("Not found");
+        }
+
+        Connection conn = this.db.getConnection();
+
+        PreparedStatement smt = conn.prepareStatement("UPDATE employee SET name = ?, role = ? WHERE id = ?");
+
+
+        if(dto.getName() != null) {
+            existsEmployee.setNome(dto.getName());
+        }
+
+        if(dto.getRole() != null) {
+            existsEmployee.setRole(Role.fromString(dto.getRole()));
+        }
+
+        smt.setString(1, existsEmployee.getNome());
+        smt.setString(2,existsEmployee.getRole().getString());
+        smt.setLong(3, existsEmployee.getId());
+
+         smt.executeUpdate();
+
+         smt.close();
+         conn.close();
+    }
+
+
+    public void deleteEmployee(Long id) throws  Exception{
+
+        var  existsEmployee = this.findById(id);
+
+
+        if(existsEmployee == null) {
+            throw  new Exception("Not found");
+        }
+
+        Connection conn = this.db.getConnection();
+
+        PreparedStatement smt = conn.prepareStatement("DELETE FROM employee WHERE employee.id = ?");
+
+
+        smt.setLong(1, id);
+
+        smt.executeUpdate();
+
+        smt.close();
+        conn.close();
+    }
+
 
 }

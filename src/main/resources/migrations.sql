@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS employee_project (
 
 
 ALTER TABLE  dependent
-    ADD CONSTRAINT fk_employee FOREIGN KEY (employee_id) REFERENCES employee(id);
+    ADD CONSTRAINT fk_employee FOREIGN KEY (employee_id) REFERENCES employee(id) ON DELETE  CASCADE;
 
 ALTER TABLE  project
     ADD CONSTRAINT fk_sector_id FOREIGN KEY (sector_id) REFERENCES sector(id);
@@ -47,3 +47,5 @@ ALTER TABLE  project
 ALTER TABLE  employee_project
     ADD CONSTRAINT fk_employee_project FOREIGN KEY (employee_id) REFERENCES employee(id),
     ADD CONSTRAINT fk_project_project FOREIGN KEY (project_id) REFERENCES project(id);
+
+
