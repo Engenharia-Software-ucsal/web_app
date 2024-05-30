@@ -1,28 +1,31 @@
-package com.rpEmpresa.web_app.http.dto;
+package com.rpEmpresa.web_app.dto;
 
 
+import com.rpEmpresa.web_app.entity.Dependent;
 import com.rpEmpresa.web_app.entity.Employee;
 import com.rpEmpresa.web_app.enums.Role;
 import lombok.Data;
 
 @Data
-public class EmployeeDto {
+public class DependentDto {
 
     public String id;
 
     public String name;
 
     public  String cpf;
-    public  String role;
+
+    public Long employeeId;
 
 
-    public Employee toEmployee() {
-        return new Employee(
+    public Dependent toEntity() {
+        return new Dependent(
                 this.id == null ? null : Long.parseLong(id),
                 this.name,
                 this.cpf,
-                Role.fromString(role)
+                this.employeeId
         );
+
 
     }
 }

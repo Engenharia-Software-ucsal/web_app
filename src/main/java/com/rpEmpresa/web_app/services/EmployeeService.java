@@ -3,11 +3,11 @@ package com.rpEmpresa.web_app.services;
 
 import com.rpEmpresa.web_app.entity.Dependent;
 import com.rpEmpresa.web_app.enums.Role;
-import com.rpEmpresa.web_app.http.dto.DependentDto;
-import com.rpEmpresa.web_app.http.dto.EmployeeDto;
+import com.rpEmpresa.web_app.dto.DependentDto;
+import com.rpEmpresa.web_app.dto.EmployeeDto;
 import com.rpEmpresa.web_app.database.PgConnection;
 import com.rpEmpresa.web_app.entity.Employee;
-import com.rpEmpresa.web_app.http.dto.UpdateEmployeeDto;
+import com.rpEmpresa.web_app.dto.UpdateEmployeeDto;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;

@@ -1,4 +1,4 @@
-package com.rpEmpresa.web_app.http.dto;
+package com.rpEmpresa.web_app.dto;
 
 
 import lombok.Data;

@@ -1,9 +1,9 @@
-package com.rpEmpresa.web_app.http;
+package com.rpEmpresa.web_app.http.controllers;
 
 import com.rpEmpresa.web_app.entity.Employee;
-import com.rpEmpresa.web_app.http.dto.DependentDto;
-import com.rpEmpresa.web_app.http.dto.EmployeeDto;
-import com.rpEmpresa.web_app.http.dto.UpdateEmployeeDto;
+import com.rpEmpresa.web_app.dto.DependentDto;
+import com.rpEmpresa.web_app.dto.EmployeeDto;
+import com.rpEmpresa.web_app.dto.UpdateEmployeeDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
