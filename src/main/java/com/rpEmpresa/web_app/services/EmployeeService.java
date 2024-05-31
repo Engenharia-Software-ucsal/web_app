@@ -3,12 +3,12 @@ package com.rpEmpresa.web_app.services;
 
 import com.rpEmpresa.web_app.entity.Dependent;
 import com.rpEmpresa.web_app.enums.Role;
-import com.rpEmpresa.web_app.dto.DependentDto;
-import com.rpEmpresa.web_app.dto.EmployeeDto;
+import com.rpEmpresa.web_app.services.dto.DependentDto;
+import com.rpEmpresa.web_app.services.dto.EmployeeDto;
 import com.rpEmpresa.web_app.database.PgConnection;
 import com.rpEmpresa.web_app.entity.Employee;
-import com.rpEmpresa.web_app.dto.UpdateEmployeeDto;
-import com.rpEmpresa.web_app.execeptions.ResourceNotFoundExeception;
+import com.rpEmpresa.web_app.services.dto.UpdateEmployeeDto;
+import com.rpEmpresa.web_app.execeptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
@@ -51,7 +51,7 @@ public class EmployeeService {
             var existsEmployee = this.findById(dto.employeeId);
 
             if(existsEmployee == null) {
-                throw  new ResourceNotFoundExeception("Employee Not found");
+                throw  new ResourceNotFoundException("Employee Not found");
             }
 
            System.out.println(existsEmployee.getId());
@@ -72,7 +72,7 @@ public class EmployeeService {
 
     }
 
-    public List<Employee> findAllEmployeesWithDependents() throws Exception {
+    public List<Employee> findAllEmployeesWithDependents(int page, int pageSize) throws Exception {
 
 
             Connection con = this.db.getConnection();
@@ -81,12 +81,16 @@ public class EmployeeService {
                     SELECT e.cpf as employee_cpf,e.role as employee_role, e.id as employee_id, e.name as employee_name, d.id
                         as dependent_id, d.name as dependent_name, d.cpf as dependent_cpf, d.employee_id as dependent_for
                     FROM employee e
-                        LEFT JOIN dependent d on e.id = d.employee_id ORDER BY  e.id;""";
+                        LEFT JOIN dependent d on e.id = d.employee_id ORDER BY  e.id LIMIT ? OFFSET ? """;
 
 
-            Statement stmt = con.createStatement();
 
-            var results =  stmt.executeQuery(query);
+            PreparedStatement stmt = con.prepareStatement(query);
+
+            stmt.setInt(1 , pageSize);
+            stmt.setInt(2 , pageSize * page);
+
+            var results =  stmt.executeQuery();
 
 
             Map<Long, Employee> map = new HashMap<>();

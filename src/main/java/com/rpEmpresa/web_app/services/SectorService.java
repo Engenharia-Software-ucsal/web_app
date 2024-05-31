@@ -2,9 +2,8 @@ package com.rpEmpresa.web_app.services;
 
 
 import com.rpEmpresa.web_app.database.PgConnection;
-import com.rpEmpresa.web_app.entity.Project;
 import com.rpEmpresa.web_app.entity.Sector;
-import com.rpEmpresa.web_app.dto.CreateSectorDto;
+import com.rpEmpresa.web_app.services.dto.CreateSectorDto;
 import org.springframework.stereotype.Service;
 
 import java.sql.PreparedStatement;

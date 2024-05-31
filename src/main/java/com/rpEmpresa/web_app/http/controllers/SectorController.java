@@ -1,7 +1,7 @@
 package com.rpEmpresa.web_app.http.controllers;
 
 
-import com.rpEmpresa.web_app.dto.CreateSectorDto;
+import com.rpEmpresa.web_app.services.dto.CreateSectorDto;
 import com.rpEmpresa.web_app.services.SectorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

@@ -1,7 +1,7 @@
 package com.rpEmpresa.web_app.http.controllers;
 
-import com.rpEmpresa.web_app.dto.AddEmployeeToProjectDto;
-import com.rpEmpresa.web_app.dto.CreateProjectDto;
+import com.rpEmpresa.web_app.services.dto.AddEmployeeToProjectDto;
+import com.rpEmpresa.web_app.services.dto.CreateProjectDto;
 import com.rpEmpresa.web_app.entity.Project;
 import com.rpEmpresa.web_app.services.ProjectService;
 import org.springframework.http.ResponseEntity;

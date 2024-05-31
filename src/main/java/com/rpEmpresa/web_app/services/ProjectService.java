@@ -2,22 +2,17 @@ package com.rpEmpresa.web_app.services;
 
 
 import com.rpEmpresa.web_app.database.PgConnection;
-import com.rpEmpresa.web_app.dto.CreateProjectDto;
+import com.rpEmpresa.web_app.services.dto.CreateProjectDto;
 import com.rpEmpresa.web_app.entity.Employee;
 import com.rpEmpresa.web_app.entity.Project;
 
-import com.rpEmpresa.web_app.entity.Sector;
-import com.rpEmpresa.web_app.execeptions.ResourceNotFoundExeception;
-import org.springframework.http.ResponseEntity;
+import com.rpEmpresa.web_app.execeptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -85,13 +80,13 @@ public class ProjectService {
         Project existingProject = this.findById(project_id);
 
         if(existingProject == null){
-            throw new ResourceNotFoundExeception("Project with id " + project_id + " not found");
+            throw new ResourceNotFoundException("Project with id " + project_id + " not found");
         }
 
         Employee existsEmployee = employeeService.findById(employee_id);
 
         if(existsEmployee == null) {
-            throw new ResourceNotFoundExeception("Employee with id " + employee_id + " not found");
+            throw new ResourceNotFoundException("Employee with id " + employee_id + " not found");
         }
 
         String sql = "INSERT INTO employee_project (employee_id, project_id, date_init) VALUES (?, ?, ?)";
@@ -113,9 +108,9 @@ public class ProjectService {
     public ArrayList<Project> findAllProjectsWithEmployees() throws Exception {
 
         String query = """
-                SELECT pr.sector_id as project_sector, pr.name as project_name, pr.id as project_id, emp.name  as emp_name,
-                emp.id as emp_id
-                from project pr
+                SELECT pr.sector_id AS project_sector, pr.name as project_name, pr.id AS project_id, emp.name  AS emp_name,
+                emp.id AS emp_id, emProject.date_init as data_init
+                FROM project pr
                     INNER JOIN employee
                         emp INNER JOIN employee_project emProject
                     ON emp.id = emProject.employee_id
@@ -143,6 +138,7 @@ public class ProjectService {
                 project.setId(projectId);
                 project.setSector_id(resulset.getLong("project_sector"));
                 map.put(projectId, project);
+
             }
 
 

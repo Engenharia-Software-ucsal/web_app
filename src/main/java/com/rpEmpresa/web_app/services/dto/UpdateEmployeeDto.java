@@ -1,4 +1,4 @@
-package com.rpEmpresa.web_app.dto;
+package com.rpEmpresa.web_app.services.dto;
 
 
 import jakarta.validation.constraints.NotBlank;
