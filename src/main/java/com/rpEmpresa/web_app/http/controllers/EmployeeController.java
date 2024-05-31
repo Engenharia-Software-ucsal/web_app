@@ -4,9 +4,9 @@ import com.rpEmpresa.web_app.entity.Employee;
 import com.rpEmpresa.web_app.dto.DependentDto;
 import com.rpEmpresa.web_app.dto.EmployeeDto;
 import com.rpEmpresa.web_app.dto.UpdateEmployeeDto;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.rpEmpresa.web_app.services.EmployeeService;
 
@@ -26,20 +26,28 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public @ResponseBody ResponseEntity<Boolean> createEmployee(@RequestBody @Validated EmployeeDto dto) {
+    public @ResponseBody ResponseEntity<Void> createEmployee(@RequestBody @Valid EmployeeDto dto) {
 
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.createEmployee(dto));
+        try {
+            employeeService.createEmployee(dto);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        }catch (Exception e) {
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
 
     @PostMapping("/dependent")
-    public @ResponseBody ResponseEntity addDependent(@RequestBody @Validated DependentDto dto) {
+    public @ResponseBody ResponseEntity<String> addDependent(@RequestBody @Valid DependentDto dto) {
 
        try {
-           var results = this.employeeService.addDependentEmployee(dto);
+           this.employeeService.addDependentEmployee(dto);
 
-           return results ? ResponseEntity.status(HttpStatus.CREATED).body(null) : ResponseEntity.badRequest().body(false);
+
+           return ResponseEntity.status(HttpStatus.CREATED).build();
 
        }catch (Exception e) {
 
@@ -52,7 +60,12 @@ public class EmployeeController {
     @GetMapping
     public @ResponseBody ResponseEntity<List<Employee>> findAllEmployeeWithDependents() {
 
-        return ResponseEntity.ok().body(this.employeeService.findAllEmployeesWithDependents());
+        try {
+            return ResponseEntity.ok().body(this.employeeService.findAllEmployeesWithDependents());
+        }catch (Exception e) {
+
+            return ResponseEntity.badRequest().body(null);
+        }
 
     }
 
@@ -66,7 +79,7 @@ public class EmployeeController {
 
 
     @PutMapping("")
-    public @ResponseBody ResponseEntity<String> updateEmployee(@RequestBody @Validated UpdateEmployeeDto dto) {
+    public @ResponseBody ResponseEntity<String> updateEmployee(@RequestBody @Valid UpdateEmployeeDto dto) {
 
         try {
             this.employeeService.updateEmployee(dto);

@@ -2,19 +2,26 @@ package com.rpEmpresa.web_app.dto;
 
 
 import com.rpEmpresa.web_app.entity.Dependent;
-import com.rpEmpresa.web_app.entity.Employee;
-import com.rpEmpresa.web_app.enums.Role;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.validator.constraints.br.CPF;
+
 
 @Data
 public class DependentDto {
 
     public String id;
 
+    @NotNull
+    @NotBlank
     public String name;
 
+    @NotNull
+    @CPF
     public  String cpf;
 
+    @NotNull
     public Long employeeId;
 
 

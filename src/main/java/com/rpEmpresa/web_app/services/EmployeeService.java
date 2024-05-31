@@ -8,6 +8,7 @@ import com.rpEmpresa.web_app.dto.EmployeeDto;
 import com.rpEmpresa.web_app.database.PgConnection;
 import com.rpEmpresa.web_app.entity.Employee;
 import com.rpEmpresa.web_app.dto.UpdateEmployeeDto;
+import com.rpEmpresa.web_app.execeptions.ResourceNotFoundExeception;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
@@ -22,8 +23,10 @@ public class EmployeeService {
         this.db = connection;
     }
 
-    public boolean createEmployee(EmployeeDto dto) {
-        try(Connection con = this.db.getConnection()) {
+    public void createEmployee(EmployeeDto dto) throws  Exception {
+
+            Connection con = this.db.getConnection();
+
             String sql = "INSERT INTO employee (name,cpf,role) VALUES (?,?,?)";
 
             PreparedStatement ps = con.prepareStatement(sql);
@@ -37,25 +40,18 @@ public class EmployeeService {
             ps.executeUpdate();
 
             ps.close();
+            con.close();
 
-            return true;
-
-        }catch (SQLException e) {
-
-            e.printStackTrace();
-
-            return false;
-        }
     }
 
-    public Boolean addDependentEmployee(DependentDto dto) throws  Exception{
+    public void addDependentEmployee(DependentDto dto) throws  Exception{
 
             Connection con = this.db.getConnection();
 
             var existsEmployee = this.findById(dto.employeeId);
 
             if(existsEmployee == null) {
-                throw  new Exception("Employee Not found");
+                throw  new ResourceNotFoundExeception("Employee Not found");
             }
 
            System.out.println(existsEmployee.getId());
@@ -74,12 +70,12 @@ public class EmployeeService {
 
             ps.close();
 
-            return true;
     }
 
-    public List<Employee> findAllEmployeesWithDependents() {
-        try(Connection con = this.db.getConnection()) {
+    public List<Employee> findAllEmployeesWithDependents() throws Exception {
 
+
+            Connection con = this.db.getConnection();
 
             String query = """
                     SELECT e.cpf as employee_cpf,e.role as employee_role, e.id as employee_id, e.name as employee_name, d.id
@@ -137,12 +133,6 @@ public class EmployeeService {
 
             return new ArrayList<>(map.values());
 
-        }catch (SQLException e) {
-
-            e.printStackTrace();
-
-            return null;
-        }
 
 
     }
