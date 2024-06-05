@@ -81,7 +81,7 @@ public class EmployeeService {
                     SELECT e.cpf as employee_cpf,e.role as employee_role, e.id as employee_id, e.name as employee_name, d.id
                         as dependent_id, d.name as dependent_name, d.cpf as dependent_cpf, d.employee_id as dependent_for
                     FROM employee e
-                        LEFT JOIN dependent d on e.id = d.employee_id ORDER BY  e.id LIMIT ? OFFSET ? """;
+                        LEFT JOIN dependent d on e.id = d.employee_id ORDER BY  e.id LIMIT ? OFFSET ?""";
 
 
 

@@ -12,10 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import com.rpEmpresa.web_app.services.EmployeeService;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 
 @RestController
 @RequestMapping("/api/employee")
@@ -29,7 +25,6 @@ public class EmployeeController {
 
     @PostMapping
     public @ResponseBody ResponseEntity<Object> createEmployee(@RequestBody @Valid EmployeeDto dto) {
-
 
         try {
             employeeService.createEmployee(dto);
