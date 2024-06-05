@@ -58,9 +58,6 @@ FROM employee e
 
 
 
-
-SELECT  * FROM employeesWithDependents;
-
 CREATE PROCEDURE updateEmployeeName(employee_id int, new_name varchar(100))
     LANGUAGE SQL AS
     $$
@@ -69,5 +66,6 @@ CREATE PROCEDURE updateEmployeeName(employee_id int, new_name varchar(100))
 
 
 
-
 CALL updateEmployeeName(9, 'Genios magrao junior');
+
+SELECT  * FROM employeesWithDependents;
