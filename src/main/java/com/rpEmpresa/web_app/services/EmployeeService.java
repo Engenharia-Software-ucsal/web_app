@@ -72,7 +72,7 @@ public class EmployeeService {
 
     }
 
-    public List<Employee> findAllEmployeesWithDependents(int page, int pageSize) throws Exception {
+    public List<Employee> findAllEmployeesWithDependentsPaged(int page, int pageSize) throws Exception {
 
 
             Connection con = this.db.getConnection();
@@ -138,6 +138,56 @@ public class EmployeeService {
             return new ArrayList<>(map.values());
 
 
+
+    }
+
+
+    public List<Employee> findAllEmployeesWithDependents() throws Exception {
+
+        Connection con = this.db.getConnection();
+
+        var results =  con.createStatement().executeQuery("SELECT * FROM employeesWithDependentsView");
+
+
+        Map<Long, Employee> map = new HashMap<>();
+
+        while (results.next()) {
+
+            long employeeId =results.getLong("employee_id");
+            long dependentId = results.getLong("dependent_id");
+
+
+            Employee employee = map.get(employeeId);
+
+            if(employee == null) {
+                employee = new Employee();
+                employee.setCpf(results.getString("employee_cpf"));
+                employee.setNome(results.getString("employee_name"));
+                employee.setRole(Role.fromString(results.getString("employee_role")));
+                employee.setId(employeeId);
+                map.put(employeeId, employee);
+
+            }
+
+            if(dependentId !=0){
+                var dependent = new Dependent();
+
+                dependent.setId(results.getLong("dependent_id"));
+                dependent.setName(results.getString("dependent_name"));
+                dependent.setCpf(results.getString("dependent_cpf"));
+                dependent.setEmployeeId(results.getLong("dependent_for"));
+
+                employee.getDependents().add(dependent);
+
+            }
+
+
+
+
+        }
+        con.close();
+
+        return new ArrayList<>(map.values());
 
     }
 

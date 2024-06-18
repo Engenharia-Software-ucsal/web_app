@@ -65,7 +65,7 @@ public class EmployeeController {
         try {
             return ResponseBuilder.buildPaged(
                     HttpStatus.OK,
-                    this.employeeService.findAllEmployeesWithDependents(page,pageSize) ,
+                    this.employeeService.findAllEmployeesWithDependentsPaged(page,pageSize) ,
                     "" ,
                      page,
                      pageSize
@@ -114,6 +114,20 @@ public class EmployeeController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
+    }
+
+
+    @GetMapping("/list-all")
+    public @ResponseBody ResponseEntity<Object> findAllEmployees()  {
+        try {
+            return  ResponseBuilder.build(
+                    HttpStatus.OK,
+                    employeeService.findAllEmployeesWithDependents(),
+                        ""
+            );
+        }catch (Exception e) {
+            return  ResponseBuilder.build(HttpStatus.BAD_REQUEST, null, e.getMessage());
+        }
     }
 
 

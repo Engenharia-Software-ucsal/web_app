@@ -1,4 +1,7 @@
+
 CREATE TYPE employee_role as ENUM ('PROVIDER', 'MANAGER');
+
+
 
 CREATE TABLE IF NOT EXISTS employee(
                                        id SERIAL PRIMARY KEY,
@@ -50,11 +53,11 @@ ALTER TABLE  employee_project
 
 
 
-CREATE VIEW employeesWithDependents as
+CREATE VIEW employeesWithDependentsView as
 SELECT e.cpf as employee_cpf,e.role as employee_role, e.id as employee_id, e.name as employee_name, d.id
              as dependent_id, d.name as dependent_name, d.cpf as dependent_cpf, d.employee_id as dependent_for
 FROM employee e
-         LEFT JOIN dependent d on e.id = d.employee_id ORDER BY  e.id;
+         LEFT JOIN dependent d on e.id = d.employee_id ORDER BY e.id;
 
 
 
@@ -69,3 +72,4 @@ CREATE PROCEDURE updateEmployeeName(employee_id int, new_name varchar(100))
 CALL updateEmployeeName(9, 'Genios magrao junior');
 
 SELECT  * FROM employeesWithDependents;
+
