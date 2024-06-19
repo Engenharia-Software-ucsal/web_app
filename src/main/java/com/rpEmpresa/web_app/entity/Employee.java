@@ -15,15 +15,20 @@ public class Employee implements Serializable {
     String nome;
     String cpf;
     Long id;
-    Role role;
+    int roleId;
     ArrayList<Dependent> dependents;
 
 
-    public Employee(Long id, String nome, String cpf, Role role) {
+  public Role getRole() {
+        return Role.fromRoleId(roleId);
+    }
+
+
+    public Employee(Long id, String nome, String cpf, int roleId) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
-        this.role = role;
+        this.roleId = roleId;
         this.dependents = new ArrayList<>();
     }
 

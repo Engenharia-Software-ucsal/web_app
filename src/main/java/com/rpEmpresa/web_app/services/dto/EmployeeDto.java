@@ -4,6 +4,7 @@ package com.rpEmpresa.web_app.services.dto;
 import com.rpEmpresa.web_app.entity.Employee;
 import com.rpEmpresa.web_app.enums.Role;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -15,12 +16,11 @@ public class EmployeeDto {
     @NotBlank
     public String name;
 
-    @CPF
+    // @CPF
     public  String cpf;
 
-
-    @NotBlank
-    public  String role;
+    @NotNull
+    public  int roleId;
 
 
     public Employee toEmployee() {
@@ -28,7 +28,7 @@ public class EmployeeDto {
                 this.id == null ? null : Long.parseLong(id),
                 this.name,
                 this.cpf,
-                Role.fromString(role)
+                this.roleId
         );
 
     }

@@ -27,15 +27,13 @@ public class EmployeeService {
 
             Connection con = this.db.getConnection();
 
-            String sql = "INSERT INTO employee (name,cpf,role) VALUES (?,?,?)";
+            String sql = "INSERT INTO employee (name, cpf, role_id) VALUES (?,?,?)";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
-            Employee ep = new Employee(null, dto.name, dto.cpf, Role.fromString(dto.role));
-
-            ps.setString(1, ep.getNome());
-            ps.setString(2, ep.getCpf());
-            ps.setString(3, ep.getRole().getString());
+            ps.setString(1, dto.name);
+            ps.setString(2, dto.cpf);
+            ps.setInt(3, dto.roleId);
 
             ps.executeUpdate();
 
@@ -74,13 +72,13 @@ public class EmployeeService {
 
     public List<Employee> findAllEmployeesWithDependentsPaged(int page, int pageSize) throws Exception {
 
-
             Connection con = this.db.getConnection();
 
             String query = """
-                    SELECT e.cpf as employee_cpf,e.role as employee_role, e.id as employee_id, e.name as employee_name, d.id
+                    SELECT e.cpf as employee_cpf, r.id as employee_role, e.id as employee_id, e.name as employee_name, d.id
                         as dependent_id, d.name as dependent_name, d.cpf as dependent_cpf, d.employee_id as dependent_for
                     FROM employee e
+                        INNER JOIN role r on r.id = e.role_id
                         LEFT JOIN dependent d on e.id = d.employee_id ORDER BY  e.id LIMIT ? OFFSET ?""";
 
 
@@ -109,7 +107,7 @@ public class EmployeeService {
                     employee = new Employee();
                     employee.setCpf(results.getString("employee_cpf"));
                     employee.setNome(results.getString("employee_name"));
-                    employee.setRole(Role.fromString(results.getString("employee_role")));
+                    employee.setRoleId(results.getInt("employee_role"));
                     employee.setId(employeeId);
                     map.put(employeeId, employee);
 
@@ -163,7 +161,7 @@ public class EmployeeService {
                 employee = new Employee();
                 employee.setCpf(results.getString("employee_cpf"));
                 employee.setNome(results.getString("employee_name"));
-                employee.setRole(Role.fromString(results.getString("employee_role")));
+                employee.setRoleId(results.getInt("employee_role"));
                 employee.setId(employeeId);
                 map.put(employeeId, employee);
 
@@ -209,7 +207,7 @@ public class EmployeeService {
             while (results.next()) {
                 employee.setId(results.getLong("id"));
                 employee.setCpf(results.getString("cpf"));
-                employee.setRole(Role.fromString(results.getString("role")));
+                employee.setRoleId(results.getInt("role_id"));
                 employee.setNome(results.getString("name"));
             }
 
@@ -236,19 +234,19 @@ public class EmployeeService {
 
         Connection conn = this.db.getConnection();
 
-        PreparedStatement smt = conn.prepareStatement("UPDATE employee SET name = ?, role = ? WHERE id = ?");
+        PreparedStatement smt = conn.prepareStatement("UPDATE employee SET name = ?, role_id = ? WHERE id = ?");
 
 
         if(dto.getName() != null) {
             existsEmployee.setNome(dto.getName());
         }
 
-        if(dto.getRole() != null) {
-            existsEmployee.setRole(Role.fromString(dto.getRole()));
+        if(dto.roleId != null) {
+            existsEmployee.setRoleId(dto.roleId);
         }
 
         smt.setString(1, existsEmployee.getNome());
-        smt.setString(2,existsEmployee.getRole().getString());
+        smt.setInt(2,existsEmployee.getRoleId());
         smt.setLong(3, existsEmployee.getId());
 
          smt.executeUpdate();

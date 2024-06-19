@@ -34,6 +34,8 @@ public class EmployeeController {
 
         }catch (Exception e) {
 
+           System.out.println(e.getMessage());
+
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }

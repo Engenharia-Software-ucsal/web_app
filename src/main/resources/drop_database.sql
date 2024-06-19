@@ -1,0 +1,1 @@
+CREATE DATABASE rb_app_db

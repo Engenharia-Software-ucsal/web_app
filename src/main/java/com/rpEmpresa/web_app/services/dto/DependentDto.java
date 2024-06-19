@@ -18,7 +18,7 @@ public class DependentDto {
     public String name;
 
     @NotNull
-    @CPF
+  //  @CPF
     public  String cpf;
 
     @NotNull
