@@ -8,11 +8,9 @@ import lombok.Data;
 public class AddEmployeeToProjectDto {
 
     @NotNull
-    @NotEmpty
     private  Long projectId;
 
     @NotNull
-    @NotEmpty
     private  Long employeeId;
 
 }

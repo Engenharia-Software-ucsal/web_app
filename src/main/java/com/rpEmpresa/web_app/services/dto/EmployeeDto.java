@@ -8,6 +8,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.br.CPF;
 
+
+
+
 @Data
 public class EmployeeDto {
 

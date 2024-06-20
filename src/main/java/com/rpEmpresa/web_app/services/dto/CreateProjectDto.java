@@ -16,8 +16,6 @@ public class CreateProjectDto {
 
 
     @NotNull
-    @NotBlank
-    @NotEmpty
     private Long sectorId;
 
 }
