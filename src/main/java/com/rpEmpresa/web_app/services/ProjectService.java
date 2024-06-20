@@ -108,8 +108,8 @@ public class ProjectService {
     public ArrayList<Project> findAllProjectsWithEmployees() throws Exception {
 
         String query = """
-                SELECT pr.sector_id AS project_sector, pr.name as project_name, pr.id AS project_id, emp.name  AS emp_name,
-                emp.id AS emp_id, emProject.date_init as data_init
+                SELECT pr.sector_id AS project_sector,  pr.name as project_name, pr.id AS project_id, emp.name  AS emp_name,
+                emp.id AS emp_id, emProject.date_init as data_init, emp.role_id as employee_role_id, emp.cpf as employee_cpf
                 FROM project pr
                     INNER JOIN employee
                         emp INNER JOIN employee_project emProject
@@ -146,6 +146,8 @@ public class ProjectService {
                 Employee em = new Employee();
                 em.setId(emp_id);
                 em.setNome(resulset.getString("emp_name"));
+                em.setRoleId(resulset.getInt("employee_role_id"));
+                em.setCpf(resulset.getString("employee_cpf"));
 
                 project.getEmployees().add(em);
             }
